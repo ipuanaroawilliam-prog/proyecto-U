@@ -1,0 +1,108 @@
+body {
+  font-family: Arial, sans-serif;
+  margin: 0;
+  padding: 0;
+  background: rgb(75, 75, 108);
+  color: #000;
+}
+
+.container {
+  max-width: 600px;
+  margin: 40px auto;
+  padding: 20px;
+  background: #fff;
+  box-shadow: 0 2px 8px rgba(7, 7, 7, 0.1);
+  border-radius: 8px;
+}
+
+h1, h2 {
+  text-align: center;
+  color: #000;
+}
+
+form {
+  display: flex;
+  flex-direction: column;
+}
+
+/* helper to place fields side-by-side */
+.row {
+  display: flex;
+  gap: 12px;
+}
+
+.row .field {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+}
+label {
+  margin-bottom: 12px;
+  font-weight: bold;
+}
+
+input[type="text"],
+input[type="time"],
+input[type="email"] {
+  width: 100%;
+  padding: 8px;
+  margin-top: 4px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  box-sizing: border-box;
+}
+
+button {
+  margin-top: 16px;
+  padding: 10px 20px;
+  background: #007bff;
+  color: #fff;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: background 0.2s ease;
+}
+
+button:hover {
+  background: #0056b3;
+}
+
+#class-list {
+  list-style: none;
+  padding: 0;
+  margin-top: 20px;
+}
+
+#class-list li {
+  background: #eef2f7;
+  padding: 10px;
+  margin-bottom: 8px;
+  border-left: 4px solid #007bff;
+  border-radius: 4px;
+}
+
+@media (max-width: 480px) {
+  .container {
+    margin: 20px;
+    padding: 15px;
+  }
+}
+.container-logo {
+  text-align: left; 
+  padding: 20px;
+}
+.logo {
+  width: 160px;
+  height: 150px;
+  border-radius: 60%;
+}  
+body {
+  background-image: url(imagen2.png);
+  background-size: cover;
+  background-repeat: no-repeat;
+  background-attachment: fixed;
+  background-position: center;
+
+  margin: 0;
+  z-index: 100vh;
+}

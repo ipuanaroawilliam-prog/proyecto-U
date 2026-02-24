@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Horario de Clases y Actividades</title>
+  <link rel="stylesheet" href="estilos.css">
+</head>
+<body>
+  <div class="contenedor-logo">
+    <img src="images.png" alt="logotipo"
+    class="logo">
+  </div>
+  <!-- Formulario de login profesional -->
+<div id="login-container" class="container">
+  <h2>Login profesional</h2>
+
+  <form id="login-form">
+    <label for="login-email">Correo institucional:</label>
+    <input type="email" id="login-email" required>
+
+    <label for="login-password">Contraseña:</label>
+    <input type="password" id="login-password" required
+            placeholder="*****************">
+
+
+
+    <button id="login-btn" type="submit">Ingresar</button>
+
+    <p id="login-loading" style="display:none;margin-top:10px;">
+      Iniciando sesión...
+    </p>
+
+    <div id="login-error"
+         style="color:red;display:none;margin-top:10px;"></div>
+  </form>
+</div>
+
+<div class="container" id="main-content" style="display:none;">
+    <h1>Registro de clases, cipas y actividades</h1>
+    <!-- selector de tipo fuera de los formularios -->
+    <div class="row">
+      <div class="field">
+        <label for="type">Tipo:</label>
+        <select id="type" name="type" required style="width:
+        fit-content; padding-right: 20px;">
+           <option value="clase">Clase</option>
+           <option value="cipa">Cipa</option>
+           <option value="materia">Materia</option>
+        </select>
+      </div>
+    </div>
+
+    <form id="class-form">
+      <div class="row">
+        <div class="field">
+          <label for="name">Nombre de la materia</label>
+          <input type="text" id="name" required>
+        </div>
+      </div>
+
+      <label for="day">Día (lunes, martes...)</label>
+      <input type="text" id="day" required>
+
+      <label for="start-time">Hora de inicio</label>
+      <input type="time" id="start-time" required>
+
+      <!-- Campo oculto para end-time -->
+      <input type="hidden" id="end-time" value="">
+
+      <label for="email">Tu correo:</label>
+      <input type="email" id="email" required>
+
+      <button type="submit">Agregar actividad</button>
+    </form>
+
+    <!-- formulario separado para materias -->
+    <form id="materia-form" style="display:none;margin-top:20px;">
+      <h3>Registrar materia</h3>
+      <label for="materia-name">Nombre de la materia:</label>
+      <input type="text" id="materia-name" required>
+
+      <label for="materia-finish-day">Día de finalización:</label>
+      <input type="text" id="materia-finish-day" placeholder="lunes, martes..." required>
+
+      <label for="materia-finish-time">Hora de finalización</label>
+      <input type="time" id="materia-finish-time" required>
+
+      <label for="materia-email">Tu correo:</label>
+      <input type="email" id="materia-email" required>
+
+      <button type="submit">Agregar materia</button>
+    </form>
+
+    <h2>Entradas registradas</h2>
+    <ul id="class-list"></ul>n
+  </div>
+
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+      const typeSelect = document.getElementById('type');
+      const classForm = document.getElementById('class-form');
+      const materiaForm = document.getElementById('materia-form');
+
+      function switchForms() {
+        if (typeSelect.value === 'materia') {
+          classForm.style.display = 'none';
+          materiaForm.style.display = '';
+        } else {
+          classForm.style.display = '';
+          materiaForm.style.display = 'none';
+        }
+      }
+
+      typeSelect.addEventListener('change', switchForms);
+      switchForms();
+
+      
+      materiaForm.addEventListener('submit', async (e) => {
+        e.preventDefault();
+        const name = document.getElementById('materia-name').value;
+        const day = document.getElementById('materia-finish-day').value;
+        const finishTime = document.getElementById('materia-finish-time').value;
+        const email = document.getElementById('materia-email').value;
+
+        try {
+          const res = await fetch('/api/classes', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+              name,
+              type: 'materia',
+              day,
+              finishDay: day,
+              finishTime,
+              email
+            })
+          });
+
+          if (!res.ok) {
+            const errData = await res.json();
+            alert(errData.error || 'Error del servidor');
+            return;
+          }
+          const data = await res.json();
+          if (!data.error) {
+            renderClasses(data.classes);
+            materiaForm.reset();
+            typeSelect.value = 'clase';
+            switchForms();
+          } else {
+            alert(data.error);
+          }
+        } catch (err) {
+          console.error(err);
+          alert('No se pudo conectar con el servidor.');
+        }
+      });
+    });
+  </script>
+  <script src="script.js"></script>
+</body>
+</html>
